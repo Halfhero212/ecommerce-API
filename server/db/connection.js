@@ -9,8 +9,7 @@ const DB_URI = `mongodb://${username}:${encodeURIComponent(password)}@${clusterU
 
 const connectToMongo = () => {
   mongoose.connect(DB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+    
   }).then(() => {
     console.log("Database connected successfully");
   }).catch(err => {
