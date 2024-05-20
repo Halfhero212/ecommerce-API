@@ -21,6 +21,7 @@ const schema =new mangoose.schema({
       availableCount: {
         type: Number,
         required: true,
+        
       },
       genre :{
         type: [String],
