@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
   customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
   items: [{
-    product: { type: mongoose.Schema.Types.ObjectId, ref: 'ShopItem' },
-    quantity: { type: Number, required: true }
+    item: { type: mongoose.Schema.Types.ObjectId, ref: 'ShopItem' },
+    quantity: { type: Number, required: true },
+    price: { type: Number, required: true }
   }],
-  totalCost: { type: Number },
+  total: { type: Number, required: true },
   orderedAt: { type: Date, default: Date.now }
 });
 
