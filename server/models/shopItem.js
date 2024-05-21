@@ -1,3 +1,4 @@
+// models/shopItem.js
 const mongoose = require('mongoose');
 
 const shopItemSchema = new mongoose.Schema({
@@ -6,10 +7,9 @@ const shopItemSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   description: { type: String, required: true },
   availableCount: { type: Number, required: true },
-  genre: { type: String }, // or category based on your preference
   category: { type: String }
 });
 
-const ShopItem = mongoose.model('ShopItem', shopItemSchema);
+const ShopItem = mongoose.models.ShopItem || mongoose.model('ShopItem', shopItemSchema);
 
 module.exports = ShopItem;
