@@ -1,7 +1,8 @@
+// adminRoutes.js
 const express = require('express');
 const { body, param, query } = require("express-validator");
 const router = express.Router();
-const adminController = require('../Controllers/adminController'); // Ensure the path is correct
+const adminController = require('../Controllers/adminController'); // Ensure path is correct
 
 // Add a new item
 router.post("/items",
@@ -15,7 +16,6 @@ router.post("/items",
   ],
   adminController.createItem
 );
-
 // Update an existing item
 router.put("/items/:id",
   [
