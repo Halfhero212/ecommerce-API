@@ -1,11 +1,28 @@
-// adminRoutes.js
+
 const express = require('express');
 const { body, param, query } = require("express-validator");
 const router = express.Router();
-const adminController = require('../Controllers/adminController'); // Ensure path is correct
+const adminController = require('../Controllers/adminController'); 
+const authenticateToken = require('../middleware/authenticateToken');
+const checkAdmin = require('../middleware/checkAdmin');
+
+// Admin Signin
+router.post('/signin', adminController.adminSignIn);
+
+// Admin Signout
+router.post('/signout', authenticateToken, adminController.adminSignOut);
+
+// Create a new admin
+router.post('/new-admin', authenticateToken, checkAdmin, 
+  [
+    body("name").isString().withMessage("Name is required"),
+    body("email").isEmail().withMessage("Valid email is required"),
+    body("password").isLength({ min: 5 }).withMessage("Password must be at least 5 characters long")
+  ], 
+  adminController.createAdmin);
 
 // Add a new item
-router.post("/items",
+router.post("/items", authenticateToken, checkAdmin,
   [
     body("name").isString().withMessage("Name is required"),
     body("price").isFloat({ gt: 0 }).withMessage("Price must be greater than 0"),
@@ -16,8 +33,9 @@ router.post("/items",
   ],
   adminController.createItem
 );
+
 // Update an existing item
-router.put("/items/:id",
+router.put("/items/:id", authenticateToken, checkAdmin,
   [
     param("id").isMongoId().withMessage("Invalid item ID"),
     body("name").optional().isString(),
@@ -31,15 +49,21 @@ router.put("/items/:id",
 );
 
 // Delete an item
-router.delete("/items/:id",
+router.delete("/items/:id", authenticateToken, checkAdmin,
   param("id").isMongoId().withMessage("Invalid item ID"),
   adminController.deleteItem
 );
 
 // Search for items by name
-router.get("/items/search",
+router.get("/items/search", authenticateToken, checkAdmin,
   query("name").isString().withMessage("Name query is required"),
   adminController.searchItem
 );
+
+router.get("/orders", authenticateToken, checkAdmin, adminController.getAllOrders);
+
+// Fetch all customers
+router.get("/customers", authenticateToken, checkAdmin, adminController.getAllCustomers);
+
 
 module.exports = router;
