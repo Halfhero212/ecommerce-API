@@ -1,7 +1,7 @@
 
 const Customer = require('../models/Customer');
 const Order = require('../models/Order');
-const ShopItem = require('../models/ShopItem');
+const ShopItem = require('../models/shopItem');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require("express-validator");
@@ -46,8 +46,8 @@ exports.customerSignIn = async (req, res) => {
 };
 
 // Customer signout
+
 exports.customerSignOut = (req, res) => {
-  req.logout();
   res.json({ message: 'Customer signed out successfully' });
 };
 
@@ -118,8 +118,10 @@ exports.getItemDetails = async (req, res) => {
 };
 
 // Add an item to the customer's cart
+// Add an item to the customer's cart
 exports.addToCart = async (req, res) => {
   const { itemId, quantity } = req.body;
+
   try {
     const item = await ShopItem.findById(itemId);
     if (!item) return res.status(404).json({ message: "Item not found" });
@@ -131,7 +133,6 @@ exports.addToCart = async (req, res) => {
     const customer = await Customer.findById(req.user.id);
     if (!customer) return res.status(404).json({ message: "Customer not found" });
 
-    // Check if item already in cart and increase quantity
     const cartItemIndex = customer.cart.findIndex(ci => ci.item.toString() === itemId);
     if (cartItemIndex > -1) {
       customer.cart[cartItemIndex].quantity += quantity;

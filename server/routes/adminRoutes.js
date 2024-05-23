@@ -59,6 +59,10 @@ router.get("/items/search", authenticateToken, checkAdmin,
   query("name").isString().withMessage("Name query is required"),
   adminController.searchItem
 );
+router.get("/items/:id", authenticateToken, checkAdmin,
+  param("id").isMongoId().withMessage("Invalid item ID"),
+  adminController.getItemDetails
+);
 
 router.get("/orders", authenticateToken, checkAdmin, adminController.getAllOrders);
 

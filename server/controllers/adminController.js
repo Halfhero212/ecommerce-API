@@ -1,5 +1,5 @@
 const Admin = require('../models/Admin');
-const ShopItem = require("../models/ShopItem");
+const ShopItem = require("../models/shopItem");
 const Order = require('../models/Order'); 
 const Customer = require('../models/Customer'); 
 const bcrypt = require('bcrypt');
@@ -117,6 +117,7 @@ exports.searchItem = async (req, res) => {
   }
 };
 
+
 // Fetch all orders
 exports.getAllOrders = async (req, res) => {
   try {
@@ -134,5 +135,22 @@ exports.getAllCustomers = async (req, res) => {
     res.status(200).json(customers);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching customers', error: error.message });
+  }
+};
+
+// Get item details
+exports.getItemDetails = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  try {
+    const item = await ShopItem.findById(req.params.id);
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+    res.status(200).json(item);
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred while fetching item details", error });
   }
 };
